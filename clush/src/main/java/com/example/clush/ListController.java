@@ -14,9 +14,16 @@ public class ListController {
         this.listRepository = listRepository;
     }
 
+//    @GetMapping
+//    public List<ListItem> getListItems() {
+//        return listRepository.findAll();
+//    }
+    
+    // username을 기준으로 할 일 목록을 가져오는 API
     @GetMapping
-    public List<ListItem> getListItems() {
-        return listRepository.findAll();
+    public List<ListItem> getListItems(@RequestParam String username) {
+        // username에 해당하는 할 일 목록만 가져오기
+        return listRepository.findByUsername(username);
     }
     
     @PostMapping("/add")
