@@ -58,8 +58,9 @@ button {
   width: 100px;
 }
 
+/* 라이트모드와 다크모드에서 버튼 스타일을 동일하게 유지 */
 body.dark-mode button {
-  background-color: #244128;
+  background-color: #4caf50;
   color: white;
 }
 
@@ -68,7 +69,7 @@ button:hover {
 }
 
 body.dark-mode button:hover {
-  background-color: #387b39;
+  background-color: #45a049;
 }
 
 button:disabled {
@@ -116,5 +117,13 @@ button + button {
 }
 
 button + button:hover {
+  background-color: #e53935;
+}
+
+body.dark-mode button + button {
+  background-color: #f44336;
+}
+
+body.dark-mode button + button:hover {
   background-color: #e53935;
 }
