@@ -18,6 +18,12 @@ public class ListController {
     public List<ListItem> getListItems() {
         return listRepository.findAll();
     }
+    
+    @PostMapping("/add")
+    public ListItem addTask(@RequestBody ListItem newItem) {
+        return listRepository.save(newItem);
+    }
+
 
     @PostMapping("/update")
     public void updateChecked(@RequestBody ListItem item) {
