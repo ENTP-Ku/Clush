@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import "../css/List.css"; // CSS 파일 임포트
 
 const List = () => {
   const [tasks, setTasks] = useState([]);
@@ -32,14 +33,13 @@ const List = () => {
       .then(() => setTasks(tasks.filter(t => t.id !== id)));
   };
 
-
   const handleAddTask = () => {
     console.log("Input value:", newTask);  // 입력값 확인
     if (newTask.trim() === "") {
       alert("할 일을 입력하세요!");
       return;
     }
-  
+
     const newTaskItem = { title: newTask, checked: false };
     axios.post("http://localhost:8080/api/list/add", newTaskItem)
       .then(response => {
@@ -51,24 +51,11 @@ const List = () => {
       });
     setNewTask("");  // 입력값 초기화
   };
-  
-  // const handleAddTask = () => {
-  //   if (newTask.trim() === "") {
-  //     alert("할 일을 입력하세요!");
-  //     return;
-  //   }
-
-  //   const newTaskItem = { title: newTask, checked: false };
-  //   axios.post("http://localhost:8080/api/list/add", newTaskItem)
-  //     .then(response => setTasks([...tasks, response.data]))
-  //     .catch(error => console.error("Error adding task:", error));
-  //   setNewTask("");
-  // };
 
   return (
     <div>
       <h1 className="text-center">할 일 목록</h1>
-      
+
       <div>
         <input
           type="text"
@@ -87,7 +74,7 @@ const List = () => {
               checked={task.checked}
               onChange={() => handleCheckboxChange(task)}
             />
-            {task.title}
+            <span className={task.checked ? "completed" : ""}>{task.title}</span>
             <button onClick={() => handleEdit(task)}>수정</button>
             <button onClick={() => handleDelete(task.id)}>삭제</button>
           </li>
