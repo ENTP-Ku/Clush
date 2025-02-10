@@ -1,9 +1,13 @@
 package com.example.clush;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "list")
+@Getter
+@Setter
 public class ListItem {
 
     @Id
@@ -16,5 +20,5 @@ public class ListItem {
     @Column(nullable = false)
     private boolean checked;
 
-    // Getters and Setters
+
 }

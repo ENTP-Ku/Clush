@@ -32,18 +32,38 @@ const List = () => {
       .then(() => setTasks(tasks.filter(t => t.id !== id)));
   };
 
+
   const handleAddTask = () => {
+    console.log("Input value:", newTask);  // 입력값 확인
     if (newTask.trim() === "") {
       alert("할 일을 입력하세요!");
       return;
     }
-
+  
     const newTaskItem = { title: newTask, checked: false };
     axios.post("http://localhost:8080/api/list/add", newTaskItem)
-      .then(response => setTasks([...tasks, response.data]))
-      .catch(error => console.error("Error adding task:", error));
-    setNewTask("");
+      .then(response => {
+        setTasks([...tasks, response.data]);
+        console.log("New task added:", response.data);  // 추가된 태스크 확인
+      })
+      .catch(error => {
+        console.error("Error adding task:", error);
+      });
+    setNewTask("");  // 입력값 초기화
   };
+  
+  // const handleAddTask = () => {
+  //   if (newTask.trim() === "") {
+  //     alert("할 일을 입력하세요!");
+  //     return;
+  //   }
+
+  //   const newTaskItem = { title: newTask, checked: false };
+  //   axios.post("http://localhost:8080/api/list/add", newTaskItem)
+  //     .then(response => setTasks([...tasks, response.data]))
+  //     .catch(error => console.error("Error adding task:", error));
+  //   setNewTask("");
+  // };
 
   return (
     <div>
