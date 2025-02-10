@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {jwtDecode} from "jwt-decode"; // jwt-decode 라이브러리에서 jwtDecode를 임포트
+import { jwtDecode } from "jwt-decode"; // jwt-decode 라이브러리에서 jwtDecode를 임포트
 import "../css/List.css"; // CSS 파일 임포트
 
 const List = () => {
@@ -30,29 +30,33 @@ const List = () => {
     if (!username) return;
 
     // username에 해당하는 할 일 목록 불러오기
-    axios.get(`http://localhost:8080/api/list?username=${username}`)
-      .then(response => setTasks(response.data))
-      .catch(error => console.error("Error fetching data:", error));
+    axios
+      .get(`http://localhost:8080/api/list?username=${username}`)
+      .then((response) => setTasks(response.data))
+      .catch((error) => console.error("Error fetching data:", error));
   }, [username]);
 
   const handleCheckboxChange = (task) => {
     const updatedTask = { ...task, checked: !task.checked };
-    axios.post("http://localhost:8080/api/list/update", updatedTask)
-      .then(() => setTasks(tasks.map(t => (t.id === task.id ? updatedTask : t))));
+    axios
+      .post("http://localhost:8080/api/list/update", updatedTask)
+      .then(() => setTasks(tasks.map((t) => (t.id === task.id ? updatedTask : t))));
   };
 
   const handleEdit = (task) => {
     const newTitle = prompt("새 제목을 입력하세요", task.title);
     if (newTitle) {
       const updatedTask = { ...task, title: newTitle };
-      axios.put("http://localhost:8080/api/list/edit", updatedTask)
-        .then(() => setTasks(tasks.map(t => (t.id === task.id ? updatedTask : t))));
+      axios
+        .put("http://localhost:8080/api/list/edit", updatedTask)
+        .then(() => setTasks(tasks.map((t) => (t.id === task.id ? updatedTask : t))));
     }
   };
 
   const handleDelete = (id) => {
-    axios.delete(`http://localhost:8080/api/list/delete/${id}`)
-      .then(() => setTasks(tasks.filter(t => t.id !== id)));
+    axios
+      .delete(`http://localhost:8080/api/list/delete/${id}`)
+      .then(() => setTasks(tasks.filter((t) => t.id !== id)));
   };
 
   const handleAddTask = () => {
@@ -60,13 +64,14 @@ const List = () => {
       alert("할 일을 입력하세요!");
       return;
     }
-  
+
     const newTaskItem = { title: newTask, checked: false, username }; // username 포함
-    axios.post("http://localhost:8080/api/list/add", newTaskItem)
-      .then(response => {
+    axios
+      .post("http://localhost:8080/api/list/add", newTaskItem)
+      .then((response) => {
         setTasks([...tasks, response.data]);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error adding task:", error);
       });
     setNewTask("");
@@ -78,10 +83,34 @@ const List = () => {
     document.body.classList.toggle("dark-mode", !isDarkMode);
   };
 
+  // 로그아웃 함수
+  const handleLogout = () => {
+    localStorage.removeItem("jwt"); // 로컬 스토리지에서 JWT 토큰 삭제
+    window.location.href = "/"; // 홈페이지로 리다이렉트
+  };
+
   return (
     <div>
       <h1 className="text-center">할 일 목록</h1>
-      
+
+      {/* 왼쪽 상단 로그아웃 버튼 */}
+      <button
+        style={{
+          position: "absolute",
+          top: "20px",
+          left: "20px",
+          padding: "10px 15px",
+          backgroundColor: "#f44336",
+          color: "#fff",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer",
+        }}
+        onClick={handleLogout}
+      >
+        로그아웃
+      </button>
+
       <div>
         <input
           type="text"
@@ -93,7 +122,7 @@ const List = () => {
       </div>
 
       <ul>
-        {tasks.map(task => (
+        {tasks.map((task) => (
           <li key={task.id}>
             <input
               type="checkbox"
