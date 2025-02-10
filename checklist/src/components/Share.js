@@ -7,9 +7,18 @@ import { useNavigate } from "react-router-dom"; // react-router-dom에서 useNav
 const ShareList = () => {
   const [tasks, setTasks] = useState([]);
   const [isDarkMode, setIsDarkMode] = useState(false);
+  
+  const navigate = useNavigate(); // useNavigate 훅 생성
 
   // 로컬 스토리지에서 JWT 토큰 가져오기
   const token = localStorage.getItem("jwt");
+
+  // JWT 토큰이 없으면 로그인 페이지로 리다이렉트
+  useEffect(() => {
+    if (!token) {
+      navigate("/login"); // 로그인 페이지로 리다이렉트
+    }
+  }, [token, navigate]);
 
   // JWT 토큰에서 username 추출 함수
   const getUsernameFromToken = (token) => {
@@ -70,7 +79,6 @@ const ShareList = () => {
   };
 
   // "나의 할일" 페이지로 이동하는 함수
-  const navigate = useNavigate();
   const goToMyTasks = () => {
     navigate("/list"); // List.js 페이지로 이동
   };
