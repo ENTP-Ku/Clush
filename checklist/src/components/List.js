@@ -43,6 +43,13 @@ const List = () => {
       .then(() => setTasks(tasks.map((t) => (t.id === task.id ? updatedTask : t))));
   };
 
+  const handleShareChange = (task) => {
+    const updatedTask = { ...task, isShared: !task.isShared }; // 공유 상태 토글
+    axios
+      .post("http://localhost:8080/api/list/update", updatedTask)
+      .then(() => setTasks(tasks.map((t) => (t.id === task.id ? updatedTask : t))));
+  };
+
   const handleEdit = (task) => {
     const newTitle = prompt("새 제목을 입력하세요", task.title);
     if (newTitle) {
@@ -121,20 +128,46 @@ const List = () => {
         <button onClick={handleAddTask}>추가</button>
       </div>
 
-      <ul>
-        {tasks.map((task) => (
-          <li key={task.id}>
-            <input
-              type="checkbox"
-              checked={task.checked}
-              onChange={() => handleCheckboxChange(task)}
-            />
-            {task.title}
-            <button onClick={() => handleEdit(task)}>수정</button>
-            <button onClick={() => handleDelete(task.id)}>삭제</button>
-          </li>
-        ))}
-      </ul>
+      {/* 테이블 형태로 목록 표시 */}
+      <table style={{ width: "100%", borderCollapse: "collapse", marginTop: "20px" }}>
+        <thead>
+          <tr>
+            <th>공유하기</th>
+            <th>완료</th>
+            <th>할 일</th>
+            <th>수정</th>
+            <th>삭제</th>
+          </tr>
+        </thead>
+        <tbody>
+          {tasks.map((task) => (
+            <tr key={task.id}>
+              <td>
+                <input
+                  type="checkbox"
+                  checked={task.isShared}
+                  onChange={() => handleShareChange(task)} // 공유 상태 변경
+                />
+              </td>
+              <td>
+                <input
+                  type="checkbox"
+                  checked={task.checked}
+                  onChange={() => handleCheckboxChange(task)} // 완료 상태 변경
+                />
+                
+              </td>
+              <td>{task.title}</td>
+              <td>
+                <button onClick={() => handleEdit(task)}>수정</button>
+              </td>
+              <td>
+                <button onClick={() => handleDelete(task.id)}>삭제</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
       {/* 다크모드 토글 버튼 */}
       <button

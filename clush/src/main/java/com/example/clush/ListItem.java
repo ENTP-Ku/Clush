@@ -20,5 +20,9 @@ public class ListItem {
 
     // username 필드 추가
     @Column(nullable = false)
-    private String username;  // 이 부분을 추가
+    private String username;  // 사용자 이름 필드
+
+    // 공유 여부 필드 추가
+    @Column(nullable = false)
+    private boolean isShared;  // 공유 여부 필드
 }

@@ -1,7 +1,9 @@
 package com.example.clush;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/list")
@@ -46,4 +48,27 @@ public class ListController {
     public void deleteListItem(@PathVariable Integer id) {
         listRepository.deleteById(id);
     }
+    
+    // 할 일 공유 여부 업데이트
+    @PutMapping("/update/shared/{id}")
+    public ResponseEntity<ListItem> updateShareStatus(@PathVariable Integer id, @RequestBody boolean isShared) {
+        Optional<ListItem> optionalListItem = listRepository.findById(id);
+        if (optionalListItem.isPresent()) {
+            ListItem listItem = optionalListItem.get();
+            listItem.setShared(isShared); // 공유 여부 업데이트
+            listRepository.save(listItem);
+            return ResponseEntity.ok(listItem); // 업데이트된 할 일 반환
+        }
+        return ResponseEntity.notFound().build(); // 할 일이 존재하지 않으면 404 응답
+    }
+
+    // 공유된 할 일 목록만 조회
+    @GetMapping("/shared")
+    public ResponseEntity<List<ListItem>> getSharedTasks() {
+        List<ListItem> sharedTasks = listRepository.findByIsSharedTrue();
+        return ResponseEntity.ok(sharedTasks); // 공유된 할 일 목록 반환
+    }
+
+    
+    
 }
