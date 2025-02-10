@@ -1,6 +1,8 @@
 package com.example.clush;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.config.Task;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +17,8 @@ public class ListController {
     public ListController(ListRepository listRepository) {
         this.listRepository = listRepository;
     }
+    
+
 
     // username을 기준으로 할 일 목록을 가져오는 API
     @GetMapping
@@ -41,6 +45,14 @@ public class ListController {
     public void deleteListItem(@PathVariable Integer id) {
         listRepository.deleteById(id);
     }
+    
+    // 공유된 할 일만 가져오는 엔드포인트
+    @GetMapping("/shared")
+    public ResponseEntity<List<ListItem>> getSharedTasks() {
+        List<ListItem> sharedTasks = listRepository.findBySharedTrue(); // shared가 true인 할 일만 가져옴
+        return ResponseEntity.ok(sharedTasks);
+    }
+
 
 }
 
