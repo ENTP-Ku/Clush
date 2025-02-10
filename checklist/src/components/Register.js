@@ -19,10 +19,10 @@ const Register = () => {
     const checkUsername = async () => {
       if (id) {
         try {
-          const response = await axios.post('http://localhost:8080/api/users/check-username', { username: id }); // 아이디 중복 체크 API 호출
+          const response = await axios.post('http://localhost:8080/api/users/check-username', { username: id });
           setIsUsernameTaken(response.data); // 중복 여부 상태 업데이트
         } catch (err) {
-          console.error('중복 체크 오류:', err); // 오류 로그
+          console.error('중복 체크 오류:', err);
         }
       } else {
         setIsUsernameTaken(false); // 아이디가 비어있으면 중복 체크 해제
@@ -30,17 +30,17 @@ const Register = () => {
     };
 
     checkUsername(); // 중복 체크 함수 호출
-  }, [id]); // id 상태가 변경될 때마다 실행
+  }, [id]);
 
   // 고유번호 중복 체크 효과
   useEffect(() => {
     const checkUniqueNumber = async () => {
       if (uniqueNumber) {
         try {
-          const response = await axios.post('http://localhost:8080/api/users/check-unique-number', { uniqueNumber }); // 고유번호 중복 체크 API 호출
+          const response = await axios.post('http://localhost:8080/api/users/check-unique-number', { uniqueNumber });
           setIsUniqueNumberTaken(response.data); // 중복 여부 상태 업데이트
         } catch (err) {
-          console.error('중복 체크 오류:', err); // 오류 로그
+          console.error('중복 체크 오류:', err);
         }
       } else {
         setIsUniqueNumberTaken(false); // 고유번호가 비어있으면 중복 체크 해제
@@ -48,10 +48,16 @@ const Register = () => {
     };
 
     checkUniqueNumber(); // 중복 체크 함수 호출
-  }, [uniqueNumber]); // uniqueNumber 상태가 변경될 때마다 실행
+  }, [uniqueNumber]);
 
   // 회원가입 처리 함수
   const handleRegister = async () => {
+    // 입력란 비어 있는지 확인
+    if (!id || !password || !confirmPassword || !uniqueNumber) {
+      alert('모든 항목을 입력해주세요.'); // 입력이 비어있으면 경고
+      return;
+    }
+
     // 비밀번호 일치 여부 확인
     if (password !== confirmPassword) {
       alert('비밀번호가 일치하지 않습니다.'); // 일치하지 않으면 경고
@@ -75,7 +81,7 @@ const Register = () => {
       // 회원가입 API 호출
       await axios.post('http://localhost:8080/api/users/register', { username: id, password, uniqueNumber });
       alert('환영합니다! 로그인 후 이용해주세요'); // 성공 메시지
-      navigate('/'); // 로그인 페이지로 이동
+      navigate('/login'); // 로그인 페이지로 이동
     } catch (err) {
       alert(err.response?.data?.message || '회원가입 중 오류가 발생했습니다.'); // 오류 처리
     } finally {
@@ -85,7 +91,6 @@ const Register = () => {
 
   return (
     <div className="register-container">
-      {/* 아이디 입력란 */}
       <input 
         type="text"  
         placeholder="아이디" 
@@ -95,7 +100,6 @@ const Register = () => {
       />
       {isUsernameTaken && <span className="error-message">이미 사용 중인 아이디입니다.</span>} {/* 아이디 중복 메시지 */}
 
-      {/* 비밀번호 입력란 */}
       <input 
         type="password" 
         placeholder="비밀번호" 
@@ -104,7 +108,6 @@ const Register = () => {
         className="input-field"
       />
 
-      {/* 비밀번호 확인 입력란 */}
       <input 
         type="password" 
         placeholder="비밀번호 확인" 
@@ -113,7 +116,6 @@ const Register = () => {
         className="input-field"
       />
 
-      {/* 고유번호 입력란 */}
       <input 
         type="text" 
         placeholder="고유번호" 
@@ -123,7 +125,6 @@ const Register = () => {
       />
       {isUniqueNumberTaken && <span className="error-message">이미 가입한 회원입니다.</span>} {/* 고유번호 중복 메시지 */}
 
-      {/* 가입 버튼 */}
       <button onClick={handleRegister} className="register-button" disabled={loading}>
         {loading ? '가입 중...' : '가입'} {/* 로딩 상태에 따른 버튼 텍스트 변경 */}
       </button>
@@ -131,4 +132,4 @@ const Register = () => {
   );
 };
 
-export default Register; // Register 컴포넌트 내보내기
+export default Register;
