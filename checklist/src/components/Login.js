@@ -13,7 +13,7 @@ const Login = () => {
     axios.post('http://localhost:8080/api/users/login', { username, password }) // 로그인 요청
       .then(res => {
         localStorage.setItem('jwt', res.data.token); // 성공 시 토큰을 로컬 스토리지에 저장
-        navigate('/'); // 로그인 성공 시 홈으로 이동
+        navigate('/list'); // 로그인 성공 시 홈으로 이동
       })
       .catch(err => {
         // 에러 처리
