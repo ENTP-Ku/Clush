@@ -18,5 +18,7 @@ public class ListItem {
     @Column(nullable = false)
     private boolean checked;
 
-
+    // username 필드 추가
+    @Column(nullable = false)
+    private String username;  // 이 부분을 추가
 }
