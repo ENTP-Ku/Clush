@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode"; // jwt-decode 라이브러리에서 jwtDecode를 임포트
+import { useNavigate } from "react-router-dom"; // useNavigate 임포트
 import "../css/List.css"; // CSS 파일 임포트
 
 const List = () => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
   const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const navigate = useNavigate(); // navigate 훅 생성
 
   // 로컬 스토리지에서 JWT 토큰 가져오기
   const token = localStorage.getItem("jwt");
@@ -96,6 +99,11 @@ const List = () => {
     window.location.href = "/"; // 홈페이지로 리다이렉트
   };
 
+  // 공유업무 페이지로 이동
+  const goToShare = () => {
+    navigate("/share"); // /share 페이지로 이동
+  };
+
   return (
     <div>
       <h1 className="text-center">할 일 목록</h1>
@@ -116,6 +124,24 @@ const List = () => {
         onClick={handleLogout}
       >
         로그아웃
+      </button>
+
+      {/* 공유업무 버튼 */}
+      <button
+        style={{
+          position: "absolute",
+          top: "60px",
+          left: "20px",
+          padding: "10px 15px",
+          backgroundColor: "#4CAF50",
+          color: "#fff",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer",
+        }}
+        onClick={goToShare}
+      >
+        공유업무
       </button>
 
       <div>

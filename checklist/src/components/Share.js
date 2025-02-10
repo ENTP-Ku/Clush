@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode"; // jwt-decode 라이브러리에서 jwtDecode를 임포트
 import "../css/List.css"; // CSS 파일 임포트
+import { useNavigate } from "react-router-dom"; // react-router-dom에서 useNavigate 임포트
 
 const ShareList = () => {
   const [tasks, setTasks] = useState([]);
@@ -68,6 +69,12 @@ const ShareList = () => {
     window.location.href = "/"; // 홈페이지로 리다이렉트
   };
 
+  // "나의 할일" 페이지로 이동하는 함수
+  const navigate = useNavigate();
+  const goToMyTasks = () => {
+    navigate("/list"); // List.js 페이지로 이동
+  };
+
   return (
     <div>
       <h1 className="text-center">공유된 할 일 목록</h1>
@@ -88,6 +95,24 @@ const ShareList = () => {
         onClick={handleLogout}
       >
         로그아웃
+      </button>
+
+      {/* 나의 할일 버튼 */}
+      <button
+        style={{
+          position: "absolute",
+          top: "80px",
+          left: "20px",
+          padding: "10px 15px",
+          backgroundColor: "#4CAF50",
+          color: "#fff",
+          border: "none",
+          borderRadius: "5px",
+          cursor: "pointer",
+        }}
+        onClick={goToMyTasks} // List.js로 이동
+      >
+        나의 할일
       </button>
 
       {/* 테이블 형태로 목록 표시 */}
