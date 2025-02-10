@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import {jwtDecode} from "jwt-decode"; // jwt-decode 라이브러리에서 jwtDecode를 임포트
 import "../css/List.css"; // CSS 파일 임포트
 
 const List = () => {
@@ -7,12 +8,32 @@ const List = () => {
   const [newTask, setNewTask] = useState("");
   const [isDarkMode, setIsDarkMode] = useState(false);
 
+  // 로컬 스토리지에서 JWT 토큰 가져오기
+  const token = localStorage.getItem("jwt");
+
+  // JWT 토큰에서 username 추출 함수
+  const getUsernameFromToken = (token) => {
+    if (!token) return null;
+    try {
+      const decodedToken = jwtDecode(token); // JWT 디코딩
+      return decodedToken.username || decodedToken.sub; // username 또는 sub 필드에서 username 추출
+    } catch (error) {
+      console.error("Invalid token:", error);
+      return null;
+    }
+  };
+
+  // username 추출
+  const username = getUsernameFromToken(token);
+
   useEffect(() => {
-    // 데이터 불러오기
-    axios.get("http://localhost:8080/api/list")
+    if (!username) return;
+
+    // username에 해당하는 할 일 목록 불러오기
+    axios.get(`http://localhost:8080/api/list?username=${username}`)
       .then(response => setTasks(response.data))
       .catch(error => console.error("Error fetching data:", error));
-  }, []);
+  }, [username]);
 
   const handleCheckboxChange = (task) => {
     const updatedTask = { ...task, checked: !task.checked };
@@ -40,7 +61,7 @@ const List = () => {
       return;
     }
   
-    const newTaskItem = { title: newTask, checked: false };
+    const newTaskItem = { title: newTask, checked: false, username }; // username 포함
     axios.post("http://localhost:8080/api/list/add", newTaskItem)
       .then(response => {
         setTasks([...tasks, response.data]);
