@@ -40,14 +40,14 @@ const List = () => {
     const updatedTask = { ...task, checked: !task.checked };
     axios
       .post("http://localhost:8080/api/list/update", updatedTask)
-      .then(() => setTasks(tasks.map((t) => (t.id === task.id ? updatedTask : t))));
+      .then(() => setTasks(tasks.map((t) => (t.id === task.id ? updatedTask : t)))); // 완료 상태 변경
   };
 
   const handleShareChange = (task) => {
-    const updatedTask = { ...task, isShared: !task.isShared }; // 공유 상태 토글
+    const updatedTask = { ...task, shared: !task.shared }; // 'isShared' → 'shared'로 변경
     axios
       .post("http://localhost:8080/api/list/update", updatedTask)
-      .then(() => setTasks(tasks.map((t) => (t.id === task.id ? updatedTask : t))));
+      .then(() => setTasks(tasks.map((t) => (t.id === task.id ? updatedTask : t)))); // 공유 상태 변경
   };
 
   const handleEdit = (task) => {
@@ -56,14 +56,14 @@ const List = () => {
       const updatedTask = { ...task, title: newTitle };
       axios
         .put("http://localhost:8080/api/list/edit", updatedTask)
-        .then(() => setTasks(tasks.map((t) => (t.id === task.id ? updatedTask : t))));
+        .then(() => setTasks(tasks.map((t) => (t.id === task.id ? updatedTask : t)))); // 제목 수정
     }
   };
 
   const handleDelete = (id) => {
     axios
       .delete(`http://localhost:8080/api/list/delete/${id}`)
-      .then(() => setTasks(tasks.filter((t) => t.id !== id)));
+      .then(() => setTasks(tasks.filter((t) => t.id !== id))); // 할 일 삭제
   };
 
   const handleAddTask = () => {
@@ -76,7 +76,7 @@ const List = () => {
     axios
       .post("http://localhost:8080/api/list/add", newTaskItem)
       .then((response) => {
-        setTasks([...tasks, response.data]);
+        setTasks([...tasks, response.data]); // 새 할 일 추가
       })
       .catch((error) => {
         console.error("Error adding task:", error);
@@ -145,7 +145,7 @@ const List = () => {
               <td>
                 <input
                   type="checkbox"
-                  checked={task.isShared}
+                  checked={task.shared} // 'isShared' → 'shared'로 변경
                   onChange={() => handleShareChange(task)} // 공유 상태 변경
                 />
               </td>
@@ -155,7 +155,6 @@ const List = () => {
                   checked={task.checked}
                   onChange={() => handleCheckboxChange(task)} // 완료 상태 변경
                 />
-                
               </td>
               <td>{task.title}</td>
               <td>

@@ -24,5 +24,5 @@ public class ListItem {
 
     // 공유 여부 필드 추가
     @Column(nullable = false)
-    private boolean isShared;  // 공유 여부 필드
+    private boolean shared;  // 공유 여부 필드
 }
