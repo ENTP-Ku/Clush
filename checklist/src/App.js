@@ -1,22 +1,25 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import List from "./components/List";
+import Login from "./components/Login"; // Login 컴포넌트 import
+import Register from "./components/Register"; // Register 컴포넌트 import
+import List from "./components/List"; // List 컴포넌트 import
 
 function App() {
   return (
     <Router>
       <div className="app-container">
-        <header className="bg-blue-500 text-white text-center p-4">
-          <h1>할 일 체크리스트</h1>
-        </header>
         <main className="p-4">
           <Routes>
-            <Route path="/" element={<List />} />
+            {/* 첫 화면을 Login.js로 설정 */}
+            <Route path="/" element={<Login />} /> 
+            
+            {/* Register 페이지로 가는 경로 설정 */}
+            <Route path="/register" element={<Register />} />
+            
+            {/* List 페이지로 가는 경로 설정 */}
+            <Route path="/list" element={<List />} />
           </Routes>
         </main>
-        <footer className="bg-gray-200 text-center p-2">
-          <p>© 2025 CheckList App</p>
-        </footer>
       </div>
     </Router>
   );

@@ -1,17 +1,26 @@
 프론트
-- list.js는 체크리스트 목록 페이지이다.  
+
+List.js
+- List.js는 체크리스트 목록 페이지이다.  
 - 페이지가 열리면 특정 엔드포인트(`/api/list`)로 GET 요청을 보낸다.  
 - 각 할 일의 좌측에는 체크박스가 있으며, 우측에는 수정 버튼과 삭제 버튼이 있다.  
 - 체크박스 상태가 변할 때마다 특정 엔드포인트(`/api/list/update`)로 POST 요청을 보낸다.  
 - 수정 버튼을 누르면 입력 필드가 활성화되며, 수정된 내용은 특정 엔드포인트(`/api/list/edit`)로 PUT 요청을 보낸다.  
 - 삭제 버튼을 누르면 특정 엔드포인트(`/api/list/delete`)로 DELETE 요청을 보낸다.
 
+Login.js
+-Login.js는 로그인 페이지다.
+-아이디 입력란, 비밀번호 입력란, 로그인 버튼, 회원가입 버튼이 있다.
+-로그인 버튼을 
 
 
 백
-- `/api/list`: list.js로부터 GET 요청을 받으면 list 테이블에서 title 칼럼 데이터를 조회하고 JSON 형식으로 반환한다.  
-- `/api/list/update`: list.js로부터 POST 요청을 받으면 전달받은 체크박스 상태 정보를 list 테이블에 업데이트한다.  
-- `/api/list/edit`: list.js로부터 PUT 요청을 받으면 전달받은 새로운 제목으로 해당 할 일을 수정한다.  
-- `/api/list/delete`: list.js로부터 DELETE 요청을 받으면 해당 할 일을 list 테이블에서 삭제한다.
+
+- `/api/list`: List.js로부터 GET 요청을 받으면 list 테이블에서 title 칼럼 데이터를 조회하고 JSON 형식으로 반환한다.  
+- `/api/list/update`: List.js로부터 POST 요청을 받으면 전달받은 체크박스 상태 정보를 list 테이블에 업데이트한다.  
+- `/api/list/edit`: List.js로부터 PUT 요청을 받으면 전달받은 새로운 제목으로 해당 할 일을 수정한다.  
+- `/api/list/delete`: List.js로부터 DELETE 요청을 받으면 해당 할 일을 list 테이블에서 삭제한다.
+
+
 
 
