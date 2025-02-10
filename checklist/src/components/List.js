@@ -5,6 +5,7 @@ import "../css/List.css"; // CSS 파일 임포트
 const List = () => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
     // 데이터 불러오기
@@ -34,28 +35,32 @@ const List = () => {
   };
 
   const handleAddTask = () => {
-    console.log("Input value:", newTask);  // 입력값 확인
     if (newTask.trim() === "") {
       alert("할 일을 입력하세요!");
       return;
     }
-
+  
     const newTaskItem = { title: newTask, checked: false };
     axios.post("http://localhost:8080/api/list/add", newTaskItem)
       .then(response => {
         setTasks([...tasks, response.data]);
-        console.log("New task added:", response.data);  // 추가된 태스크 확인
       })
       .catch(error => {
         console.error("Error adding task:", error);
       });
-    setNewTask("");  // 입력값 초기화
+    setNewTask("");
+  };
+
+  // 다크모드 토글 함수
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+    document.body.classList.toggle("dark-mode", !isDarkMode);
   };
 
   return (
     <div>
       <h1 className="text-center">할 일 목록</h1>
-
+      
       <div>
         <input
           type="text"
@@ -74,12 +79,30 @@ const List = () => {
               checked={task.checked}
               onChange={() => handleCheckboxChange(task)}
             />
-            <span className={task.checked ? "completed" : ""}>{task.title}</span>
+            {task.title}
             <button onClick={() => handleEdit(task)}>수정</button>
             <button onClick={() => handleDelete(task.id)}>삭제</button>
           </li>
         ))}
       </ul>
+
+      {/* 다크모드 토글 버튼 */}
+      <button
+        style={{
+          position: "fixed",
+          top: "20px",
+          right: "20px",
+          padding: "10px 15px",
+          backgroundColor: "#333",
+          color: "#fff",
+          border: "none",
+          borderRadius: "50%",
+          cursor: "pointer",
+        }}
+        onClick={toggleDarkMode}
+      >
+        {isDarkMode ? "☀️" : "🌙"}
+      </button>
     </div>
   );
 };
