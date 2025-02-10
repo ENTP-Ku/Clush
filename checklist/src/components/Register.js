@@ -81,7 +81,7 @@ const Register = () => {
       // 회원가입 API 호출
       await axios.post('http://localhost:8080/api/users/register', { username: id, password, uniqueNumber });
       alert('환영합니다! 로그인 후 이용해주세요'); // 성공 메시지
-      navigate('/login'); // 로그인 페이지로 이동
+      navigate('/'); // 로그인 페이지로 이동
     } catch (err) {
       alert(err.response?.data?.message || '회원가입 중 오류가 발생했습니다.'); // 오류 처리
     } finally {
