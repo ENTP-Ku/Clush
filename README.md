@@ -21,11 +21,10 @@
 
 (1) 필요한 환경 설치:
    - Node.js 설치 (최소 14.x 이상)
-   - NPM 또는 Yarn 패키지 매니저
+   - NPM 패키지 매니저
 
 (2) 프로젝트 클론:   
-   git clone https://github.com/ENTP-Ku/Clush.git
-   cd <your-project-directory>   
+   git clone https://github.com/ENTP-Ku/Clush.git   
 
 (3) 필요한 패키지 설치:   
    npm install   
