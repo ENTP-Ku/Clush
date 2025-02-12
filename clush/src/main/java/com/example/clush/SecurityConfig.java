@@ -36,7 +36,7 @@ public class SecurityConfig implements WebMvcConfigurer {
         .cors()  // CORS 설정 추가
 .and()
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/users/login", "/api/users/register").permitAll()
+                .requestMatchers("/api/users/login", "/api/users/register", "/api/users/check-username", "/api/users/check-unique-number").permitAll()  // 중복 체크 API에 대한 허용 추가
                 .anyRequest().authenticated()
             )
             .addFilterBefore(new JwtFilter(jwtUtil, userDetailsService), UsernamePasswordAuthenticationFilter.class);
@@ -58,10 +58,11 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000")
+                .allowedOrigins("http://localhost:3000")  // React 앱의 CORS 요청을 허용
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
     }
 }
+
 
