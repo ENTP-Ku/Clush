@@ -1,39 +1,67 @@
-package com.example.clush; // 패키지 선언
+package com.example.clush;
 
-import org.springframework.context.annotation.Bean; // Bean을 정의하기 위한 import
-import org.springframework.context.annotation.Configuration; // 구성 클래스를 정의하기 위한 import
-import org.springframework.security.config.annotation.web.builders.HttpSecurity; // HTTP 보안 설정을 위한 import
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity; // 웹 보안 활성화를 위한 import
-import org.springframework.security.web.SecurityFilterChain; // 보안 필터 체인을 위한 import
-import org.springframework.web.servlet.config.annotation.CorsRegistry; // CORS 설정을 위한 클래스
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer; // Spring MVC 설정 인터페이스
-import org.springframework.lang.NonNull;
+import com.example.clush.JwtFilter;
+import com.example.clush.JwtUtil;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-
-// Spring Security 및 CORS 구성을 위한 클래스
 @Configuration
-@EnableWebSecurity // Spring Security 기능을 활성화
+@EnableWebSecurity
 public class SecurityConfig implements WebMvcConfigurer {
 
-    // 보안 필터 체인을 설정하는 메소드
+    private final JwtUtil jwtUtil;
+    private final UserDetailsService userDetailsService;
+
+    public SecurityConfig(JwtUtil jwtUtil, UserDetailsService userDetailsService) {
+        this.jwtUtil = jwtUtil;
+        this.userDetailsService = userDetailsService;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-        .csrf(csrf -> csrf.disable()) // CSRF 보호 비활성화
-        .authorizeHttpRequests(authorize -> authorize // 요청에 대한 권한 설정
-            .anyRequest().permitAll()) // 모든 요청은 기본적으로 접근 허용
-            .httpBasic(httpBasic -> httpBasic.realmName("Realm")); // 기본 HTTP 인증 사용 및 Realm 설정
+        http.csrf(csrf -> csrf.disable())
+        .cors()  // CORS 설정 추가
+.and()
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/users/login", "/api/users/register").permitAll()
+                .anyRequest().authenticated()
+            )
+            .addFilterBefore(new JwtFilter(jwtUtil, userDetailsService), UsernamePasswordAuthenticationFilter.class);
 
-        return http.build(); // 설정 완료 후 보안 필터 체인 반환
+        return http.build();
     }
 
-    // CORS 매핑 추가
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
     @Override
-    public void addCorsMappings(@NonNull CorsRegistry registry) {
-        registry.addMapping("/**") // 모든 경로에 대해 CORS 설정
-                .allowedOrigins("http://localhost:3000,http://localhost:3000/register") // 모든 출처 허용
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // 허용할 HTTP 메소드
-                .allowedHeaders("*") // 모든 헤더 허용
-                .allowCredentials(true); // 인증 정보 허용
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:3000")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true);
     }
 }
+

@@ -1,6 +1,8 @@
 package com.example.clush; // 패키지 선언
 
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired; // 의존성 주입을 위한 import
 import org.springframework.stereotype.Service; // 서비스 클래스를 나타내는 annotation
 
@@ -28,18 +30,21 @@ public class UserService {
 
     // 사용자 로그인 메서드
     public User login(String username, String password) {
-        User user = userRepository.findByUsername(username); // 사용자 이름으로 사용자 검색
+        Optional<User> optionalUser = userRepository.findByUsername(username); // 사용자 검색
 
-        // 비밀번호 확인 로직 추가
-        if (user != null && user.getPassword().equals(password)) {
-            return user; // 비밀번호가 일치하면 사용자 객체 반환
-        } else {
-            return null; // 비밀번호가 일치하지 않으면 null 반환
+        if (optionalUser.isPresent()) { // 사용자가 존재하는 경우
+            User user = optionalUser.get(); // Optional에서 User 객체 추출
+            if (user.getPassword().equals(password)) { // 비밀번호 일치 확인
+                return user; 
+            }
         }
+
+        return null; // 사용자 없거나 비밀번호 불일치 시 null 반환
     }
 
+
     // 주어진 사용자 이름으로 사용자를 검색하는 메서드
-    public User findByUsername(String username) {
+    public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username); // 사용자 이름으로 사용자 검색
     }
 }
