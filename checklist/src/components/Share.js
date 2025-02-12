@@ -67,16 +67,6 @@ const ShareList = () => {
     }
   };
 
-  const handleDelete = (id) => {
-    axios
-      .delete(`http://localhost:8080/api/list/delete/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      .then(() => setTasks(tasks.filter((t) => t.id !== id)));
-  };
-
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
     document.body.classList.toggle("dark-mode", !isDarkMode);
@@ -136,7 +126,6 @@ const ShareList = () => {
             <th>할 일</th>
             <th>작성자</th>
             <th>수정</th>
-            <th>삭제</th>
           </tr>
         </thead>
         <tbody>
@@ -153,9 +142,6 @@ const ShareList = () => {
               <td>{task.username}</td>
               <td>
                 <button onClick={() => handleEdit(task)}>수정</button>
-              </td>
-              <td>
-                <button onClick={() => handleDelete(task.id)}>삭제</button>
               </td>
             </tr>
           ))}
