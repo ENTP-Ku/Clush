@@ -14,6 +14,13 @@ const List = () => {
   // 로컬 스토리지에서 JWT 토큰 가져오기
   const token = localStorage.getItem("jwt");
 
+  // JWT 토큰이 없으면 로그인 페이지로 리다이렉트
+  useEffect(() => {
+    if (!token) {
+      navigate("/"); // 로그인 페이지로 리다이렉트
+    }
+  }, [token, navigate]);
+  
   // JWT 토큰에서 username 추출 함수
   const getUsernameFromToken = (token) => {
     if (!token) return null;

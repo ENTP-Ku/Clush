@@ -16,7 +16,7 @@ const ShareList = () => {
   // JWT 토큰이 없으면 로그인 페이지로 리다이렉트
   useEffect(() => {
     if (!token) {
-      navigate("/login"); // 로그인 페이지로 리다이렉트
+      navigate("/"); // 로그인 페이지로 리다이렉트
     }
   }, [token, navigate]);
 
