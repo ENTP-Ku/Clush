@@ -78,3 +78,10 @@
 
 3) API 테스트
    스웨거 UI에서 API 목록을 확인하고, 각 API를 테스트할 수 있습니다.
+
+
+
+
+5. 테스트 케이스는 구글 스프레드시트에 작성하였으며, 백엔드와 프론트엔드를 각각 구분하여 두 개의 탭으로 나누어 정리하였습니다.
+아래 링크를 통해 접근하실 수 있습니다.
+https://docs.google.com/spreadsheets/d/1S7oLHfcu1OKi9WBd4As1-YCHT0F1JK1zK-aTOJpHTXo/edit?usp=drive_link
